@@ -443,10 +443,9 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   }
 
   getFileDownloadUrl (video: MVideoWithHost) {
-    const basePath = this.isHLS()
-      ? STATIC_DOWNLOAD_PATHS.HLS_VIDEOS
-      : STATIC_DOWNLOAD_PATHS.VIDEOS
-    const path = join(basePath, this.filename)
+    const path = this.isHLS()
+      ? join(STATIC_DOWNLOAD_PATHS.HLS_VIDEOS, `${video.uuid}-${this.resolution}-fragmented${this.extname}`)
+      : join(STATIC_DOWNLOAD_PATHS.VIDEOS, `${video.uuid}-${this.resolution}${this.extname}`)
 
     if (video.isOwned()) return WEBSERVER.URL + path
 
